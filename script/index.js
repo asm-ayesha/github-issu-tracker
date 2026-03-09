@@ -2,6 +2,8 @@ const allBtn = document.getElementById("all-btn")
 const openBtn = document.getElementById("open-btn")
 const closedBtn = document.getElementById("closed-btn")
 
+let allIssues =[]
+
 function toggleStyle(id) {
 
     // added background and text color
@@ -28,7 +30,27 @@ async function loadIssues() {
     const data = await res.json()
 
     // console.log(data.data)
-    displayIssues(data.data)
+    // displayIssues(data.data)
+     allIssues = data.data;
+    filterIssues('all')
+}
+
+
+
+function filterIssues(filter){
+    let filtered = []
+
+    if(filter === 'all') {
+        filtered = allIssues;
+    } 
+    else if(filter === 'open') {
+        filtered = allIssues.filter(issue => issue.status.toLowerCase() === 'open');
+    } 
+    else if(filter === 'closed') {
+        filtered = allIssues.filter(issue => issue.status.toLowerCase() === 'closed');
+    }
+
+    displayIssues(filtered);
 }
 
 
@@ -41,22 +63,53 @@ function displayIssues(issues) {
 
     issues.forEach(issue => {
 
-        const priorityClass =
-            issue.priority.toUpperCase() === 'HIGH' ? 'bg-red-100 text-red-500' :
-                issue.priority.toUpperCase() === 'MEDIUM' ? 'bg-yellow-100 text-yellow-500' :
-                    'bg-green-100 text-green-500';
-        console.log('Priority:', issue.priority);
+        // labbels genaret
+
+        const labelHTML = issue.labels.map(label => {
+            const cardLabel = label.toLowerCase();
+
+            if (cardLabel === "bug") {
+                return `<p class="px-4 py-2 bg-red-100 text-red-500 font-bold rounded-4xl">
+                    <i class="fa-solid fa-bug"></i> Bug
+                </p>`;
+            }
+            else if (cardLabel === "help wanted") {
+                return `<p class="px-4 py-2 bg-amber-100 text-amber-500 font-bold rounded-4xl">
+                    <i class="fa-solid fa-life-ring"></i> Help Wanted
+                </p>`;
+            }
+            else if (cardLabel === "documentation") {
+                return `<p class="px-4 py-2 bg-blue-100 text-blue-500 font-bold rounded-4xl">
+                    <i class="fa-solid fa-book"></i> Documentation
+                </p>`;
+            }
+            else if (cardLabel === "enhancement") {
+                return `<p class="px-4 py-2 bg-purple-100 text-purple-500 font-bold rounded-4xl">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Enhancement
+                </p>`;
+            }
+            else if (cardLabel === "good first issue") {
+                return `<p class="px-4 py-2 bg-green-100 text-green-500 font-bold rounded-4xl">
+                    <i class="fa-solid fa-star"></i> Good First Issue
+                </p>`;
+            }
+            else {
+                return "";
+            }
+        }).join("");
+
+
 
         const div = document.createElement("div")
         div.innerHTML = ` 
-        <div class="border-t-4  border-amber-200  rounded-lg shadow-lg h-full">
+        <div class="${issue.status.toLowerCase() === 'open' ? 'border-t-4 border-green-500' : 'border-t-4  border-purple-500'} rounded-lg shadow-lg h-full">
                 <div class="p-8">
                     <div class="flex justify-between mb-4">
-                        <img src="./assets/Open-Status.png" alt="">
+                        <img src="${issue.status.toLowerCase() === 'open' ? './assets/Open-Status.png' : './assets/Closed- Status .png'}" alt="status">
                         <p class="px-4 text-center font-bold rounded-4xl uppercase
                         ${issue.priority.toUpperCase() === 'HIGH' ? 'bg-red-100 text-red-500' :
-                        issue.priority.toUpperCase() === 'MEDIUM' ? 'bg-yellow-100 text-yellow-500' :
-                        'bg-gray-200 text-gray-500'}">
+                issue.priority.toUpperCase() === 'MEDIUM' ? 'bg-yellow-100 text-yellow-500' :
+                    'bg-gray-200 text-gray-500'}">
                         ${issue.priority}
                         </p>
                     </div>
@@ -64,11 +117,8 @@ function displayIssues(issues) {
                     <h2 class="text-xl font-bold mb-2">${issue.title}</h2>
                     <p class="text-gray-500 line-clamp-2">${issue.description}</p>
 
-                    <div class="flex justify-between mt-4">
-                        <p class="px-4 py-2 bg-red-100 text-center text-red-500 font-bold rounded-4xl"><i
-                                class="fa-solid fa-bug"></i> Bug</p>
-                        <p class="px-4 py-2 bg-amber-100 text-center text-amber-500 font-bold rounded-4xl"><i
-                                class="fa-solid fa-life-ring"></i> help wanted</p>
+                    <div class="flex gap-2 mx-auto mt-4">
+                        ${labelHTML}
                     </div>
 
                 </div>
@@ -86,6 +136,10 @@ function displayIssues(issues) {
 
         container.appendChild(div);
     })
+
+        // Update issues count
+   document.getElementById("issues-count").textContent = `${issues.length} Issues`;
+  
 }
 
 loadIssues()
