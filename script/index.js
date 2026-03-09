@@ -66,6 +66,79 @@ function filterIssues(filter){
 }
 
 
+
+const loadDetail = async(id) =>{
+    const url =`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`
+    // console.log(url)
+
+    const res =await fetch(url)
+    const details = await res.json()
+    displayDetails(details.data)
+
+}
+
+const displayDetails = (detail) =>{
+    const detailBox = document.getElementById("details-container")
+
+     // labbels genaret
+
+        const labelHTML = detail.labels.map(label => {
+            const cardLabel = label.toLowerCase();
+
+            if (cardLabel === "bug") {
+                return `<p class="px-4 py-2 bg-red-100 text-red-500 font-bold rounded-4xl">
+                    <i class="fa-solid fa-bug"></i> Bug
+                </p>`;
+            }
+            else if (cardLabel === "help wanted") {
+                return `<p class="px-4 py-2 bg-amber-100 text-amber-500 font-bold rounded-4xl">
+                    <i class="fa-solid fa-life-ring"></i> Help Wanted
+                </p>`;
+            }
+            else if (cardLabel === "documentation") {
+                return `<p class="px-4 py-2 bg-blue-100 text-blue-500 font-bold rounded-4xl">
+                    <i class="fa-solid fa-book"></i> Documentation
+                </p>`;
+            }
+            else if (cardLabel === "enhancement") {
+                return `<p class="px-4 py-2 bg-purple-100 text-purple-500 font-bold rounded-4xl">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Enhancement
+                </p>`;
+            }
+            else if (cardLabel === "good first issue") {
+                return `<p class="px-4 py-2 bg-green-100 text-green-500 font-bold rounded-4xl">
+                    <i class="fa-solid fa-star"></i> Good First Issue
+                </p>`;
+            }
+            else {
+                return "";
+            }
+        }).join("");
+
+    detailBox.innerHTML = `
+         <h2 class="text-xl font-bold mb-2"">${detail.title}</h2>
+                    <ul class="space-y-2 text-gray-700 mb-4">
+                        <li><span class="font-semibold">Status:</span> ${detail.status}</li>
+                        <li><span class="font-semibold">Author:</span> ${detail.author}</li>
+                        <li><span class="font-semibold">Assignee:</span> ${detail.createdAt}</li>
+                    </ul>
+
+                    <div class="flex gap-2 mx-auto mt-4">
+                        ${labelHTML}
+                    </div>
+
+                     <p class="text-gray-500 line-clamp-2">${detail.description}</p>
+
+                     <div class="bg-gray-100 flex justify-between p-4">
+                        <p>Assignee: ${detail.assignee}</p>
+            <p>Priority: ${detail.priority}</p>
+                     </div>
+    `
+     document.getElementById("my_modal").showModal();
+}
+
+
+
 function displayIssues(issues) {
     const container = document.getElementById("issues-container")
     container.innerHTML = ""
@@ -114,7 +187,7 @@ function displayIssues(issues) {
 
         const div = document.createElement("div")
         div.innerHTML = ` 
-        <div class="${issue.status.toLowerCase() === 'open' ? 'border-t-4 border-green-500' : 'border-t-4  border-purple-500'} rounded-lg shadow-lg h-full">
+        <div onclick="loadDetail(${issue.id})" class="${issue.status.toLowerCase() === 'open' ? 'border-t-4 border-green-500' : 'border-t-4  border-purple-500'} rounded-lg shadow-lg h-full">
                 <div class="p-8">
                     <div class="flex justify-between mb-4">
                         <img src="${issue.status.toLowerCase() === 'open' ? './assets/Open-Status.png' : './assets/Closed- Status .png'}" alt="status">
@@ -153,5 +226,8 @@ function displayIssues(issues) {
    document.getElementById("issues-count").textContent = `${issues.length} Issues`;
   
 }
+
+
+
 
 loadIssues()
