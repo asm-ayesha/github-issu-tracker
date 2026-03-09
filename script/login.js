@@ -1,4 +1,4 @@
-const loginBtn = document.getElementById("login-btn").addEventListener("click", function(){ 
+document.getElementById("login-btn").addEventListener("click", function(){ 
     const userName = document.getElementById("user-name")
     const name = userName.value ;
 
