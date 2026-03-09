@@ -1,3 +1,7 @@
+if(localStorage.getItem("login") !== "true"){
+    window.location.href = "login.html"
+}
+
 const allBtn = document.getElementById("all-btn")
 const openBtn = document.getElementById("open-btn")
 const closedBtn = document.getElementById("closed-btn")

@@ -6,6 +6,7 @@ document.getElementById("login-btn").addEventListener("click", function(){
     const pass = userPass.value ;
 
     if(name === "admin" && pass === "admin123"){
+        localStorage.setItem("login", "true")
         window.location.replace("/index.html")
     }
     else{
