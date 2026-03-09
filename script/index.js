@@ -35,9 +35,16 @@ async function loadIssues() {
     filterIssues('all')
 }
 
+function showSpinner() {
+    document.getElementById("loading-spinner").classList.remove("hidden");
+}
 
+function hideSpinner() {
+    document.getElementById("loading-spinner").classList.add("hidden");
+}
 
 function filterIssues(filter){
+     showSpinner();
     let filtered = []
 
     if(filter === 'all') {
@@ -49,6 +56,11 @@ function filterIssues(filter){
     else if(filter === 'closed') {
         filtered = allIssues.filter(issue => issue.status.toLowerCase() === 'closed');
     }
+
+    setTimeout(() => {
+        displayIssues(filtered);
+        hideSpinner();
+    }, 100);
 
     displayIssues(filtered);
 }
