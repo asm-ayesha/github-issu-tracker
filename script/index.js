@@ -21,34 +21,5 @@ function toggleStyle(id) {
     selected.classList.remove('bg-white', 'text-gray-500')
     selected.classList.add('bg-primary', 'text-white')
 
-
-    // if (id == 'interview-filter-btn') {
-    //     cardContainer.classList.add('hidden');
-    //     filterSection.classList.remove('hidden');
-    //     if(interviewArry.length == 0){
-    //         showEmptyMessage(filterSection)
-    //         calCount()
-    //     }
-    //     else{
-    //         renderInterview()
-    //     }
-    // }
-    // else if (id == 'all-filter-btn') {
-    //     cardContainer.classList.remove('hidden');
-    //     filterSection.classList.add('hidden');
-    //     calCount()
-    // }
-    // else if (id == 'rejected-filter-btn') {
-    //     cardContainer.classList.add('hidden');
-    //     filterSection.classList.remove('hidden');
-    //     if(rejectedArry.length == 0){
-    //         showEmptyMessage(filterSection)
-    //         calCount()
-    //     }
-    //     else{
-    //         renderRejected()
-    //     }
-    // }
-
 }
 
