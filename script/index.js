@@ -96,17 +96,17 @@ const displayDetails = (detail) =>{
                 </p>`;
             }
             else if (cardLabel === "documentation") {
-                return `<p class="px-4 py-2 bg-blue-100 text-blue-500 font-bold rounded-4xl">
+                return `<p class="px-4 py-2 bg-blue-100 text-blue-500 rounded-4xl">
                     <i class="fa-solid fa-book"></i> Documentation
                 </p>`;
             }
             else if (cardLabel === "enhancement") {
-                return `<p class="px-4 py-2 bg-purple-100 text-purple-500 font-bold rounded-4xl">
+                return `<p class="px-4 py-2 bg-purple-100 text-purple-500 rounded-4xl">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> Enhancement
                 </p>`;
             }
             else if (cardLabel === "good first issue") {
-                return `<p class="px-4 py-2 bg-green-100 text-green-500 font-bold rounded-4xl">
+                return `<p class="px-4 py-2 bg-green-100 text-green-500  rounded-4xl">
                     <i class="fa-solid fa-star"></i> Good First Issue
                 </p>`;
             }
@@ -154,27 +154,27 @@ function displayIssues(issues) {
             const cardLabel = label.toLowerCase();
 
             if (cardLabel === "bug") {
-                return `<p class="px-4 py-2 bg-red-100 text-red-500 font-bold rounded-4xl">
+                return `<p class="px-4 py-2 bg-red-100 text-red-500 rounded-4xl">
                     <i class="fa-solid fa-bug"></i> Bug
                 </p>`;
             }
             else if (cardLabel === "help wanted") {
-                return `<p class="px-4 py-2 bg-amber-100 text-amber-500 font-bold rounded-4xl">
+                return `<p class="px-2 py-2 bg-amber-100 text-amber-500  rounded-4xl">
                     <i class="fa-solid fa-life-ring"></i> Help Wanted
                 </p>`;
             }
             else if (cardLabel === "documentation") {
-                return `<p class="px-4 py-2 bg-blue-100 text-blue-500 font-bold rounded-4xl">
+                return `<p class="px-2 py-2 bg-blue-100 text-blue-500 rounded-4xl">
                     <i class="fa-solid fa-book"></i> Documentation
                 </p>`;
             }
             else if (cardLabel === "enhancement") {
-                return `<p class="px-4 py-2 bg-purple-100 text-purple-500 font-bold rounded-4xl">
+                return `<p class="px-2 py-2 bg-purple-100 text-purple-500  rounded-4xl">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> Enhancement
                 </p>`;
             }
             else if (cardLabel === "good first issue") {
-                return `<p class="px-4 py-2 bg-green-100 text-green-500 font-bold rounded-4xl">
+                return `<p class="px-2 py-2 bg-green-100 text-green-500 rounded-4xl">
                     <i class="fa-solid fa-star"></i> Good First Issue
                 </p>`;
             }
@@ -231,3 +231,27 @@ function displayIssues(issues) {
 
 
 loadIssues()
+
+
+
+document.getElementById("search-btn").addEventListener("click", () => { 
+    const input = document.getElementById("input-search");
+    const searchValue = input.value.trim().toLowerCase();
+    console.log(searchValue);
+
+    // Fix the fetch URL to include the search term properly
+    fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchValue}`)
+        .then((res) => res.json())
+        .then((data) => {  // Changed res to data here
+            const allIssues = data.data;
+            console.log(allIssues);
+
+            // Filtering the issues based on the title
+            const filteredIssues = allIssues.filter(issue => 
+                issue.title.toLowerCase().includes(searchValue)
+            );
+
+            displayIssues(filteredIssues);
+        })
+        
+});
