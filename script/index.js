@@ -27,23 +27,38 @@ async function loadIssues() {
     const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
     const data = await res.json()
 
-    console.log(data.data)
+    // console.log(data.data)
     displayIssues(data.data)
 }
 
 
-function displayIssues(issues){
+function displayIssues(issues) {
     const container = document.getElementById("issues-container")
     container.innerHTML = ""
 
-    issues.forEach(issue => { 
+
+
+
+    issues.forEach(issue => {
+
+        const priorityClass =
+            issue.priority.toUpperCase() === 'HIGH' ? 'bg-red-100 text-red-500' :
+                issue.priority.toUpperCase() === 'MEDIUM' ? 'bg-yellow-100 text-yellow-500' :
+                    'bg-green-100 text-green-500';
+        console.log('Priority:', issue.priority);
+
         const div = document.createElement("div")
         div.innerHTML = ` 
         <div class="border-t-4  border-amber-200  rounded-lg shadow-lg h-full">
                 <div class="p-8">
                     <div class="flex justify-between mb-4">
                         <img src="./assets/Open-Status.png" alt="">
-                        <p class="px-4  bg-red-100 text-center text-red-500 font-bold rounded-4xl">${issue.priority}</p>
+                        <p class="px-4 text-center font-bold rounded-4xl uppercase
+                        ${issue.priority.toUpperCase() === 'HIGH' ? 'bg-red-100 text-red-500' :
+                        issue.priority.toUpperCase() === 'MEDIUM' ? 'bg-yellow-100 text-yellow-500' :
+                        'bg-gray-200 text-gray-500'}">
+                        ${issue.priority}
+                        </p>
                     </div>
 
                     <h2 class="text-xl font-bold mb-2">${issue.title}</h2>
@@ -69,7 +84,7 @@ function displayIssues(issues){
         
         `
 
-         container.appendChild(div);
+        container.appendChild(div);
     })
 }
 
